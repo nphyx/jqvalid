@@ -1,0 +1,82 @@
+jQuery.ui.validate.validators holds a repository of validation objects, which
+are registered via:
+
+jQuery.ui.validate.prototype.register(properties);
+
+
+Basic Use
+
+jQuery('form').validate();
+
+The following options (listed with their defaults)
+are available to the validate:
+checkSubmit: if true, the form will be validated before submitting (default true)
+parentSelector: if supplied, ui-state-error will be applied to this parent instead of the input (default false)
+text: display text as "tagname" or as "title" on icon (default "span")
+submitSuccess: if checkSubmit, submitSuccess will be called if the form is valid
+submitFailure: if checkSubmit, submitFailure will be called if the form is invalid
+
+
+Apply classes to your form fields as you wish. A validation check gets run
+each time a validate field is blurred (clicked away from), as well as when
+the form is submitted.
+
+Current standard validation classes include:
+
+vaild-alphabetical: only letters
+valid-alpha-spaces: only letters and spaces
+valid-alpha-numeric: only letters and numbers
+valid-alpha-num-spaces: only letters, numbers, and spaces
+valid-verify-password: must be identical to the "validate-password" field
+valid-integer: must be an integer (whole number) (note, does not validate byte size)
+valid-float: must be a floating point (decimal) number (note, does not validate byte size)
+valid-ip-address: must be a valid ip address format (does not do sanity checking)
+valid-us-phone: must be a U.S. phone number, format (123) 456-7890
+valid-street-address: tries to validate against all common street address formats (take it or leave it)
+valid-us-currency: a dollar amount
+valid-na-postal: valid U.S. / Canada postal code
+valid-url: validates urls according to the official spec
+valid-email-address: validates email addresses according to the official spec
+valid-minimum: mjust meet a min char length according to a rel="minimum:x" attribute
+valid-select-option: selected option must not have an empty value
+
+
+
+To create your own validator, use:
+
+var properties = {
+	classname:, // the class name for a form field to bind to
+	regexp:, // a regular expression string to validate for
+	text:, // help text when the string is invalid
+	callback:, // a callback function for additional logic
+}
+
+jQuery.ui.validate.prototype.register(properties);
+
+Or alternatively, on your already-initialized object,
+
+jQuery(selector).validate("register", properties);
+
+You must have either a regexp or a callback, but you need not supply both.
+The callback function accepts a reference to the field to be validated and
+returns a boolean - true if validation was successful, false if not.
+
+Note in most circumstances you'll want to make your regexp pass on an empty
+field, so that you don't conflict with valid-required. The easiest way to
+do that is to surround it with a 0-1 quantified subpattern. For instance
+
+^
+
+becomes
+
+^(?$
+
+This allows your validator to operate as a non-required field while still
+strictly validating against your subpattern when there is content.
+
+You can easily specify elements for the validator to skip using the
+validate-skip class. The purpose of this class is to allow you to toggle items
+on and off without togglign off their validation types (for instance if
+certain sections of your form may be hidden or irrelevant and don't always
+need to be validated).
+
