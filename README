@@ -64,12 +64,7 @@ returns a boolean - true if validation was successful, false if not.
 Note in most circumstances you'll want to make your regexp pass on an empty
 field, so that you don't conflict with valid-required. The easiest way to
 do that is to surround it with a 0-1 quantified subpattern. For instance
-
-^
-
-becomes
-
-^(?$
+^.*$ becomes ^(.*)?$ 
 
 This allows your validator to operate as a non-required field while still
 strictly validating against your subpattern when there is content.
